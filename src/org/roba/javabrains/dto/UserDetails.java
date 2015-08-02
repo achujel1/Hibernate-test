@@ -8,6 +8,7 @@ public class UserDetails {
 
 	@Id
 	private int id;
+
 	private String userName;
 
 	public int getId() {
