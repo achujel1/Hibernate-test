@@ -40,7 +40,10 @@
 		<property name="show_sql">true</property>
 
 		<!-- Drop and re-create the database schema on startup -->
-		<property name="hbm2ddl.auto">create</property>
+		<!-- <property name="hbm2ddl.auto">create</property> -->
+
+		<!-- If you're using update, than all values in database will be re-created -->
+		<property name="hbm2ddl.auto">update</property>
 
 		<!-- Names the annotated entity class -->
 		<mapping class="org.roba.javabrains.dto.UserDetails" />
