@@ -1,5 +1,7 @@
 package org.roba.javabrains.hibernate;
 
+import java.util.Date;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -22,7 +24,22 @@ public class HibernateTest {
 	 */
 	public static void main(String[] args) {
 
-		// Some code
+		UserDetails user = new UserDetails();
+		user.setUserId(1);
+		user.setUserName("First name");
+		user.setAddress("First user's address");
+		user.setJoinedDate(new Date());
+		user.setDescription("This is a simple description");
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.getTransaction().commit();
 
 	}
 
