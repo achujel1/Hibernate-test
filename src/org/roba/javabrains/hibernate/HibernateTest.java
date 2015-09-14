@@ -24,12 +24,25 @@ public class HibernateTest {
 	 */
 	public static void main(String[] args) {
 
+		// Space for future code
+
+	}
+
+	/**
+	 * Here I have tested more of annotations (more in UserDetails class)
+	 */
+	private static void testingMoreAnnotations() {
 		UserDetails user = new UserDetails();
 		user.setUserId(1);
 		user.setUserName("First name");
 		user.setAddress("First user's address");
 		user.setJoinedDate(new Date());
 		user.setDescription("This is a simple description");
+		StringBuilder sb = new StringBuilder("This is a simple description");
+
+		// This error I will have to leave cause I don't know how to fix it at
+		// the moment
+		user.setDescriptionLob(sb.toString().toCharacter());
 
 		Configuration config = new Configuration().configure();
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -40,7 +53,6 @@ public class HibernateTest {
 		session.beginTransaction();
 		session.save(user);
 		session.getTransaction().commit();
-
 	}
 
 	/**
@@ -91,6 +103,7 @@ public class HibernateTest {
 		firstHibernateTest();
 		testingUpdateAndCreateProperties();
 		testedColumnNamingInHibernate();
+		testingMoreAnnotations();
 	}
 
 	/**
