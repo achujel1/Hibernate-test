@@ -2,6 +2,7 @@ package org.roba.javabrains.dto;
 
 import java.util.Date;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -37,7 +38,18 @@ public class UserDetails {
 	// This annotation will only show date (without timestamp) in the table
 	@Temporal(TemporalType.DATE)
 	private Date joinedDate;
-	private String address;
+	
+	@Embedded
+	private Address address;
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
 	/**
 	 * Found on the internet:
 	 * 
@@ -82,14 +94,6 @@ public class UserDetails {
 
 	public void setJoinedDate(Date joinedDate) {
 		this.joinedDate = joinedDate;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
 	}
 
 	public String getDescription() {

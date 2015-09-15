@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.roba.javabrains.dto.Address;
 import org.roba.javabrains.dto.UserDetails;
 
 /**
@@ -24,7 +25,29 @@ public class HibernateTest {
 	 */
 	public static void main(String[] args) {
 
-		// Space for code
+		UserDetails user = new UserDetails();
+		user.setUserName("Username");
+		user.setJoinedDate(new Date());
+		user.setDescription("Simple description");
+
+		Address addr = new Address();
+		addr.setStreet("Street name");
+		addr.setState("Sate name");
+		addr.setCity("City name");
+		addr.setPincode("123465798");
+
+		user.setAddress(addr);
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.getTransaction().commit();
+		session.close();
 
 	}
 
@@ -58,7 +81,7 @@ public class HibernateTest {
 		UserDetails user = new UserDetails();
 		user.setUserId(1);
 		user.setUserName("First name");
-		user.setAddress("First user's address");
+		// user.setAddress("First user's address");
 		user.setJoinedDate(new Date());
 		user.setDescription("This is a simple description");
 
@@ -89,7 +112,7 @@ public class HibernateTest {
 		UserDetails user = new UserDetails();
 		user.setUserId(1);
 		user.setUserName("First name");
-		user.setAddress("First user's address");
+		// user.setAddress("First user's address");
 		user.setJoinedDate(new Date());
 		user.setDescription("This is a simple description");
 		StringBuilder sb = new StringBuilder("This is a simple description");
