@@ -29,6 +29,29 @@ public class HibernateTest {
 	}
 
 	/**
+	 * Tested how primary keys are automatically added with Hibernate to
+	 * database
+	 */
+	private static void testingAutomaticAdditionOfPrimaryKeys() {
+		UserDetails user = new UserDetails();
+		user.setUserName("Second Name");
+		UserDetails user2 = new UserDetails();
+		user2.setUserName("Third Name");
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.save(user2);
+		session.getTransaction().commit();
+		session.close();
+	}
+
+	/**
 	 * Just tested data retrieving from database
 	 */
 	private static void testingDataRetrievingFromDatabase() {
@@ -136,6 +159,7 @@ public class HibernateTest {
 		testedColumnNamingInHibernate();
 		testingMoreAnnotations();
 		testingDataRetrievingFromDatabase();
+		testingAutomaticAdditionOfPrimaryKeys();
 	}
 
 	/**

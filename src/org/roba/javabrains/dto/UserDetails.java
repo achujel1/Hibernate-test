@@ -2,14 +2,13 @@ package org.roba.javabrains.dto;
 
 import java.util.Date;
 
-import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 /**
  * Test class to work with hibernate (databases)
@@ -24,14 +23,15 @@ import javax.persistence.Transient;
 public class UserDetails {
 
 	@Id
+	@GeneratedValue
 	// Commenting this for future tests
 	// @Column(name = "USER_ID")
 	private int userId;
 	// Commenting this for future tests
 	// @Column(name = "USER_NAME")
-	@Basic
+	// @Basic
 	// This property means that the value won't be initialized in the table
-	@Transient
+	// @Transient
 	// Here we will skip userName initialization in the table
 	private String userName;
 	// This annotation will only show date (without timestamp) in the table
