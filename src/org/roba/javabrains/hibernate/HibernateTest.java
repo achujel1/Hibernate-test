@@ -24,8 +24,39 @@ public class HibernateTest {
 	 */
 	public static void main(String[] args) {
 
-		// Space for future code
+		// Space for code
 
+	}
+
+	/**
+	 * Just tested data retrieving from database
+	 */
+	private static void testingDataRetrievingFromDatabase() {
+		UserDetails user = new UserDetails();
+		user.setUserId(1);
+		user.setUserName("First name");
+		user.setAddress("First user's address");
+		user.setJoinedDate(new Date());
+		user.setDescription("This is a simple description");
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.getTransaction().commit();
+		session.close();
+
+		user = null;
+
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		user = (UserDetails) session.get(UserDetails.class, 1);
+		System.out.println("This is name retrieved from database "
+				+ user.getAddress());
 	}
 
 	/**
@@ -42,7 +73,7 @@ public class HibernateTest {
 
 		// This error I will have to leave cause I don't know how to fix it at
 		// the moment
-		user.setDescriptionLob(sb.toString().toCharacter());
+		// user.setDescriptionLob(sb.toString().toCharacter());
 
 		Configuration config = new Configuration().configure();
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -104,6 +135,7 @@ public class HibernateTest {
 		testingUpdateAndCreateProperties();
 		testedColumnNamingInHibernate();
 		testingMoreAnnotations();
+		testingDataRetrievingFromDatabase();
 	}
 
 	/**
