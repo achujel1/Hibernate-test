@@ -25,6 +25,45 @@ public class HibernateTest {
 	 */
 	public static void main(String[] args) {
 
+		// Soon here will be some code...
+
+	}
+
+	/**
+	 * I've tested how setting and embedded objects work. Also, tested on how to
+	 * set these embedded objects with different column name. Did this with @AttributesOverride
+	 * annotation.
+	 */
+	private static void testingEmbeddedObjects() {
+		UserDetails user = new UserDetails();
+		user.setUserName("UserName");
+		user.setJoinedDate(new Date());
+		user.setDescription("Simple description");
+
+		Address addr = new Address();
+		addr.setStreet("Street Name");
+		addr.setState("State Name");
+		addr.setCity("City name");
+		addr.setPincode("1234567");
+
+		user.setWorkAddress(addr);
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.getTransaction().commit();
+		session.close();
+	}
+
+	/**
+	 * Tested how embedded objects are working in hibernate
+	 */
+	private static void testedEmbeddedObjects() {
 		UserDetails user = new UserDetails();
 		user.setUserName("Username");
 		user.setJoinedDate(new Date());
@@ -48,7 +87,6 @@ public class HibernateTest {
 		session.save(user);
 		session.getTransaction().commit();
 		session.close();
-
 	}
 
 	/**
@@ -183,6 +221,8 @@ public class HibernateTest {
 		testingMoreAnnotations();
 		testingDataRetrievingFromDatabase();
 		testingAutomaticAdditionOfPrimaryKeys();
+		testedEmbeddedObjects();
+		testingEmbeddedObjects();
 	}
 
 	/**

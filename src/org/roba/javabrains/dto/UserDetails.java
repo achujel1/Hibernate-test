@@ -2,6 +2,9 @@ package org.roba.javabrains.dto;
 
 import java.util.Date;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,9 +41,41 @@ public class UserDetails {
 	// This annotation will only show date (without timestamp) in the table
 	@Temporal(TemporalType.DATE)
 	private Date joinedDate;
-	
+
 	@Embedded
 	private Address address;
+
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "street", column = @Column(name = "HOME_STREET_NAME")),
+			@AttributeOverride(name = "city", column = @Column(name = "HOME_CITY_NAME")),
+			@AttributeOverride(name = "state", column = @Column(name = "HOME_STATE_NAME")),
+			@AttributeOverride(name = "pincode", column = @Column(name = "HOME_PIN_CODE")) })
+	private Address homeAddress;
+
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "street", column = @Column(name = "WORK_STREET_NAME")),
+			@AttributeOverride(name = "city", column = @Column(name = "WORK_CITY_NAME")),
+			@AttributeOverride(name = "state", column = @Column(name = "WORK_STATE_NAME")),
+			@AttributeOverride(name = "pincode", column = @Column(name = "WORK_PIN_CODE")) })
+	private Address workAddress;
+
+	public Address getHomeAddress() {
+		return homeAddress;
+	}
+
+	public void setHomeAddress(Address homeAddress) {
+		this.homeAddress = homeAddress;
+	}
+
+	public Address getWorkAddress() {
+		return workAddress;
+	}
+
+	public void setWorkAddress(Address workAddress) {
+		this.workAddress = workAddress;
+	}
 
 	public Address getAddress() {
 		return address;
