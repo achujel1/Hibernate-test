@@ -25,8 +25,66 @@ public class HibernateTest {
 	 */
 	public static void main(String[] args) {
 
-		// Soon here will be some code...
+		// Space for future code
 
+	}
+
+	/**
+	 * Here I'm testing collections of elements and trying out @ElementCollection
+	 * annotation
+	 */
+	private static void testingCollectionsOfElements() {
+		UserDetails user = new UserDetails();
+		user.setUserName("UserName");
+		user.setJoinedDate(new Date());
+		user.setDescription("Simple description");
+
+		UserDetails user2 = new UserDetails();
+		user2.setUserName("Second username");
+		user2.setJoinedDate(new Date());
+		user2.setDescription("Simmple description");
+
+		Address addr1 = new Address();
+		addr1.setStreet("Frist street");
+		addr1.setState("First state");
+		addr1.setCity("First city");
+		addr1.setPincode("12345");
+
+		Address addr2 = new Address();
+		addr2.setStreet("Second street");
+		addr2.setState("Second state");
+		addr2.setCity("Second city");
+		addr2.setPincode("54321");
+
+		user.getListOfAddresses().add(addr1);
+		user.getListOfAddresses().add(addr2);
+
+		Address addr3 = new Address();
+		addr3.setStreet("Third Name");
+		addr3.setState("Third state");
+		addr3.setCity("Third city name name");
+		addr3.setPincode("1234567");
+
+		Address addr4 = new Address();
+		addr4.setStreet("Fourth Name");
+		addr4.setState("Fourth state");
+		addr4.setCity("Fourth city name name");
+		addr4.setPincode("412312");
+
+		user2.getListOfAddresses().add(addr3);
+		user2.getListOfAddresses().add(addr4);
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.save(user2);
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	/**
@@ -46,7 +104,8 @@ public class HibernateTest {
 		addr.setCity("City name");
 		addr.setPincode("1234567");
 
-		user.setWorkAddress(addr);
+		// Commenting this for future tests
+		// user.setWorkAddress(addr);
 
 		Configuration config = new Configuration().configure();
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -223,6 +282,7 @@ public class HibernateTest {
 		testingAutomaticAdditionOfPrimaryKeys();
 		testedEmbeddedObjects();
 		testingEmbeddedObjects();
+		testingCollectionsOfElements();
 	}
 
 	/**
