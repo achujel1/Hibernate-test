@@ -9,6 +9,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.roba.javabrains.dto.Address;
 import org.roba.javabrains.dto.UserDetails;
+import org.roba.javabrains.dto.Vehicle;
 
 /**
  * Test class to work with Hibernate
@@ -24,7 +25,40 @@ public class HibernateTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// Space for some code
+		// Add some code!
+	}
+
+	/**
+	 * Part 13 One to One mapping
+	 * 
+	 * Tested how one to one mapping works: - Added new class Vehicle - Added
+	 * annotations @Entity, @Id, @GeneratedValue - Added mapping in
+	 * hibernate.cfg.xml - Tesetd addition of Vahicle object to UserDetails
+	 * table
+	 */
+	private static void testingOneToOneMapping() {
+		UserDetails user = new UserDetails();
+		user.setUserName("UserName");
+		user.setJoinedDate(new Date());
+		user.setDescription("Simple description");
+
+		Vehicle vehicle = new Vehicle();
+		vehicle.setVehicleId(2);
+		vehicle.setVehicleName("Vehicle name");
+
+		user.setVehicle(vehicle);
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.save(vehicle);
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	/**
@@ -403,6 +437,8 @@ public class HibernateTest {
 		testingCollectionsOfElements();
 		testingPrimeryKeysInCollections();
 		testingFetchType();
+		testingOneToOneMapping();
+
 	}
 
 	/**
