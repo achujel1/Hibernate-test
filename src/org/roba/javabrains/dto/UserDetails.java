@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,10 +17,6 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.CollectionId;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  * Test class to work with hibernate (databases)
@@ -59,10 +55,18 @@ public class UserDetails {
 	// }
 
 	// Creating a collection of addresses to test primary keys in a collection
-	@ElementCollection
+	// @ElementCollection(fetch=FetchType.EAGER)
+	// @JoinTable(name = "USER_ADDRESS", joinColumns = @JoinColumn(name =
+	// "USER_ID"))
+	// @GenericGenerator(name = "hilo-gen", strategy = "hilo")
+	// @CollectionId(columns = { @Column(name = "ADDRESS_ID") }, generator =
+	// "hilo-gen", type = @Type(type = "long"))
+	// private Collection<Address> listOfAddresses = new ArrayList<Address>();
+
+	// Testing fetchTypes
+	@ElementCollection(fetch = FetchType.EAGER)
+	// @ElementCollection(fetch = FetchType.LAZY)
 	@JoinTable(name = "USER_ADDRESS", joinColumns = @JoinColumn(name = "USER_ID"))
-	@GenericGenerator(name = "hilo-gen", strategy = "hilo")
-	@CollectionId(columns = { @Column(name = "ADDRESS_ID") }, generator = "hilo-gen", type = @Type(type = "long"))
 	private Collection<Address> listOfAddresses = new ArrayList<Address>();
 
 	public Collection<Address> getListOfAddresses() {
