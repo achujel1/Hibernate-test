@@ -25,7 +25,35 @@ public class HibernateTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// Add some code!
+	}
+
+	private static void testingOneToManyAnnotation() {
+		UserDetails user = new UserDetails();
+		user.setUserName("First user");
+
+		Vehicle vehicle = new Vehicle();
+		vehicle.setVehicleName("Car");
+
+		Vehicle vehicle2 = new Vehicle();
+		vehicle2.setVehicleName("Jeep");
+
+		user.getVehicle().add(vehicle);
+		user.getVehicle().add(vehicle2);
+		vehicle.setUser(user);
+		vehicle2.setUser(user);
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.save(vehicle);
+		session.save(vehicle2);
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	/**
@@ -46,7 +74,7 @@ public class HibernateTest {
 		vehicle.setVehicleId(2);
 		vehicle.setVehicleName("Vehicle name");
 
-		user.setVehicle(vehicle);
+		// user.setVehicle(vehicle);
 
 		Configuration config = new Configuration().configure();
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -438,6 +466,7 @@ public class HibernateTest {
 		testingPrimeryKeysInCollections();
 		testingFetchType();
 		testingOneToOneMapping();
+		testingOneToManyAnnotation();
 
 	}
 
