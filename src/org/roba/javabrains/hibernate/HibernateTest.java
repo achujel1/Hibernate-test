@@ -24,9 +24,64 @@ public class HibernateTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		// Space for some code
+	}
 
-		// Space for future code
+	/**
+	 * Tested how to create a primary key in a collection
+	 */
+	private static void testingPrimeryKeysInCollections() {
+		UserDetails user = new UserDetails();
+		user.setUserName("UserName");
+		user.setJoinedDate(new Date());
+		user.setDescription("Simple description");
 
+		UserDetails user2 = new UserDetails();
+		user2.setUserName("Second username");
+		user2.setJoinedDate(new Date());
+		user2.setDescription("Simple description");
+
+		Address addr1 = new Address();
+		addr1.setStreet("First street");
+		addr1.setState("First state");
+		addr1.setCity("First city");
+		addr1.setPincode("123456");
+
+		Address addr2 = new Address();
+		addr2.setStreet("Second street");
+		addr2.setState("Second state");
+		addr2.setCity("Second city");
+		addr2.setPincode("564123");
+
+		user.getListOfAddresses().add(addr1);
+		user.getListOfAddresses().add(addr2);
+
+		Address addr3 = new Address();
+		addr3.setStreet("Third street");
+		addr3.setState("Third state");
+		addr3.setCity("Third city");
+		addr3.setPincode("789456");
+
+		Address addr4 = new Address();
+		addr4.setStreet("Fourth street");
+		addr4.setState("Fourth state");
+		addr4.setCity("Fourth city");
+		addr4.setPincode("987654");
+
+		user2.getListOfAddresses().add(addr3);
+		user2.getListOfAddresses().add(addr4);
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.save(user2);
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	/**
@@ -283,6 +338,7 @@ public class HibernateTest {
 		testedEmbeddedObjects();
 		testingEmbeddedObjects();
 		testingCollectionsOfElements();
+		testingPrimeryKeysInCollections();
 	}
 
 	/**
