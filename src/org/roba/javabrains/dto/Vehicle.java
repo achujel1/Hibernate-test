@@ -1,10 +1,13 @@
 package org.roba.javabrains.dto;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -14,16 +17,28 @@ public class Vehicle {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int vehicleId;
 	private String vehicleName;
-	@ManyToOne
-	private UserDetails user;
+	@ManyToMany
+	private Collection<UserDetails> listOfUsers = new ArrayList<UserDetails>();
 
-	public UserDetails getUser() {
-		return user;
+	public Collection<UserDetails> getListOfUsers() {
+		return listOfUsers;
 	}
 
-	public void setUser(UserDetails user) {
-		this.user = user;
+	public void setListOfUsers(Collection<UserDetails> listOfUsers) {
+		this.listOfUsers = listOfUsers;
 	}
+
+	// Commenting this part of @ManyToMany test
+	// @ManyToOne
+	// private UserDetails user;
+	//
+	// public UserDetails getUser() {
+	// return user;
+	// }
+	//
+	// public void setUser(UserDetails user) {
+	// this.user = user;
+	// }
 
 	public int getVehicleId() {
 		return vehicleId;

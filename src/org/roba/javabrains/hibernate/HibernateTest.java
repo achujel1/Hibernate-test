@@ -25,6 +25,38 @@ public class HibernateTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+
+		// Space for some code
+
+	}
+
+	private static void testingManyToManyAnnotations() {
+		UserDetails user = new UserDetails();
+		user.setUserName("First user");
+
+		Vehicle vehicle = new Vehicle();
+		vehicle.setVehicleName("Car");
+
+		Vehicle vehicle2 = new Vehicle();
+		vehicle2.setVehicleName("Jeep");
+
+		user.getListOfVehicles().add(vehicle);
+		user.getListOfVehicles().add(vehicle2);
+		vehicle.getListOfUsers().add(user);
+		vehicle2.getListOfUsers().add(user);
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.save(vehicle);
+		session.save(vehicle2);
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	private static void testingOneToManyAnnotation() {
@@ -37,10 +69,11 @@ public class HibernateTest {
 		Vehicle vehicle2 = new Vehicle();
 		vehicle2.setVehicleName("Jeep");
 
-		user.getVehicle().add(vehicle);
-		user.getVehicle().add(vehicle2);
-		vehicle.setUser(user);
-		vehicle2.setUser(user);
+		// Commenting because methods have been changed
+		// user.getVehicle().add(vehicle);
+		// user.getVehicle().add(vehicle2);
+		// vehicle.setUser(user);
+		// vehicle2.setUser(user);
 
 		Configuration config = new Configuration().configure();
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -467,7 +500,7 @@ public class HibernateTest {
 		testingFetchType();
 		testingOneToOneMapping();
 		testingOneToManyAnnotation();
-
+		testingManyToManyAnnotations();
 	}
 
 	/**
