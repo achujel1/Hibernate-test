@@ -28,8 +28,37 @@ public class HibernateTest {
 	 */
 	public static void main(String[] args) {
 
-		// Some code
+		// Space for some code
 
+	}
+
+	/**
+	 * Tested how to implement inheritance with single table
+	 */
+	private static void implementingInheritanceSingleTable() {
+		Vehicle vehicle = new Vehicle();
+		vehicle.setVehicleName("car");
+
+		TwoWheeler bike = new TwoWheeler();
+		bike.setVehicleName("suzuki");
+		bike.setSteeringHandle("Bike steering handle");
+
+		FourWheeler car = new FourWheeler();
+		car.setVehicleName("ferrari");
+		car.setSteeringWheel("car steering wheel");
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(vehicle);
+		session.save(car);
+		session.save(bike);
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	/**
@@ -567,6 +596,7 @@ public class HibernateTest {
 		testingManyToManyAnnotations();
 		testingCascadeAndNotFound();
 		implementingInheritance();
+		implementingInheritanceSingleTable();
 	}
 
 	/**
