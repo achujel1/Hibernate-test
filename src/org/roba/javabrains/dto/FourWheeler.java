@@ -1,10 +1,10 @@
 package org.roba.javabrains.dto;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("Car")
+// Commenting this part for TABLE_PER_CLASS strategy
+// @DiscriminatorValue("Car")
 public class FourWheeler extends Vehicle {
 
 	private String SteeringWheel;

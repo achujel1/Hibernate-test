@@ -27,15 +27,13 @@ public class HibernateTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
 		// Space for some code
-
 	}
 
 	/**
-	 * Tested how to implement inheritance with single table
+	 * Implemented inheritance with table per class strategy
 	 */
-	private static void implementingInheritanceSingleTable() {
+	private static void implementingInheritanceWithTablePerClassStrategy() {
 		Vehicle vehicle = new Vehicle();
 		vehicle.setVehicleName("car");
 
@@ -59,6 +57,13 @@ public class HibernateTest {
 		session.save(bike);
 		session.getTransaction().commit();
 		session.close();
+	}
+
+	/**
+	 * Tested how to implement inheritance with single table
+	 */
+	private static void implementingInheritanceSingleTable() {
+		implementingInheritanceWithTablePerClassStrategy();
 	}
 
 	/**
@@ -597,6 +602,7 @@ public class HibernateTest {
 		testingCascadeAndNotFound();
 		implementingInheritance();
 		implementingInheritanceSingleTable();
+		implementingInheritanceWithTablePerClassStrategy();
 	}
 
 	/**
