@@ -28,6 +28,7 @@ public class HibernateTest {
 	 */
 	public static void main(String[] args) {
 		// Space for some code
+		implementingInheritanceWithTablePerClassStrategy();
 	}
 
 	/**
