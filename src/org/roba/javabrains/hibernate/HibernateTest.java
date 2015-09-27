@@ -8,6 +8,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.roba.javabrains.dto.Address;
+import org.roba.javabrains.dto.FourWheeler;
+import org.roba.javabrains.dto.TwoWheeler;
 import org.roba.javabrains.dto.UserDetails;
 import org.roba.javabrains.dto.Vehicle;
 
@@ -26,8 +28,38 @@ public class HibernateTest {
 	 */
 	public static void main(String[] args) {
 
-		// Space for some code
+		// Some code
 
+	}
+
+	/**
+	 * Implemented inheritance to vehicle class and tested how everything worked
+	 * out
+	 */
+	private static void implementingInheritance() {
+		Vehicle vehicle = new Vehicle();
+		vehicle.setVehicleName("car");
+
+		TwoWheeler bike = new TwoWheeler();
+		bike.setVehicleName("ducatti");
+		bike.setSteeringHandle("Bike steering handle");
+
+		FourWheeler car = new FourWheeler();
+		car.setVehicleName("porsche");
+		car.setSteeringWheel("car steering wheel");
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(vehicle);
+		session.save(bike);
+		session.save(car);
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	/**
@@ -534,6 +566,7 @@ public class HibernateTest {
 		testingOneToManyAnnotation();
 		testingManyToManyAnnotations();
 		testingCascadeAndNotFound();
+		implementingInheritance();
 	}
 
 	/**
