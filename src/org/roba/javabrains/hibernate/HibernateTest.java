@@ -27,7 +27,40 @@ public class HibernateTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// Space for some code
+
+	}
+
+	/**
+	 * Tested how Transient, Persistent and Detached Objects work in hibernate
+	 */
+	private static void transientPersistenAndDetachedObjects() {
+		// Creating a new user object
+		UserDetails user = new UserDetails();
+		user.setUserName("First user name");
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		// Changing user's name
+		// This is transient?
+		user.setUserName("Name changed before session.save()");
+		session.save(user);
+
+		// This will be written into database
+		// This is persistent?
+		user.setUserName("Name changed after session.save()");
+
+		session.getTransaction().commit();
+		session.close();
+
+		// This is detach object
+		// This won't be written into database
+		user.setUserName("Name changed after session.close()");
 	}
 
 	/**
@@ -655,6 +688,7 @@ public class HibernateTest {
 		implementingInheritanceSingleTable();
 		implementingInheritanceWithTablePerClassStrategy();
 		crudOperations();
+		transientPersistenAndDetachedObjects();
 	}
 
 	/**
