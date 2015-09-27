@@ -28,7 +28,57 @@ public class HibernateTest {
 	 */
 	public static void main(String[] args) {
 		// Space for some code
-		implementingInheritanceWithTablePerClassStrategy();
+	}
+
+	/**
+	 * Tested some of the CRUD operations with database
+	 */
+	private static void crudOperations() {
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		// Using loop to create some user objects in database
+		for (int i = 1; i < 10; i++) {
+			UserDetails user = new UserDetails();
+			user.setUserName("UserName " + i);
+			System.out.println("Creating: " + user.getUserName());
+			session.save(user);
+		}
+
+		// Using loop to retrieve some of the objects in database
+		for (int i = 1; i < 10; i++) {
+			UserDetails user = (UserDetails) session.get(UserDetails.class, i);
+			System.out.println("Retrieving: " + user.getUserName());
+		}
+
+		// Using loop to update and delete some of the values in database
+		for (int i = 1; i < 10; i++) {
+			UserDetails user = (UserDetails) session.get(UserDetails.class, i);
+			if (i % 2 == 0) {
+				user.setUserName("Updated");
+				session.update(user);
+			} else if (i % 3 == 0) {
+				session.delete(user);
+			}
+		}
+
+		// Finally getting all of the UserDetails objects in databse
+		for (int i = 1; i < 10; i++) {
+			UserDetails user = (UserDetails) session.get(UserDetails.class, i);
+			// Avoiding user's null value
+			if (user != null) {
+				System.out.println(user.getUserName());
+			}
+
+		}
+
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	/**
@@ -604,6 +654,7 @@ public class HibernateTest {
 		implementingInheritance();
 		implementingInheritanceSingleTable();
 		implementingInheritanceWithTablePerClassStrategy();
+		crudOperations();
 	}
 
 	/**
