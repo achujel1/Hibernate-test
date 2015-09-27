@@ -30,6 +30,38 @@ public class HibernateTest {
 
 	}
 
+	/**
+	 * Testing cascade and NotFound annotation
+	 */
+	private static void testingCascadeAndNotFound() {
+		UserDetails user = new UserDetails();
+		user.setUserName("First name");
+
+		Vehicle vehicle = new Vehicle();
+		vehicle.setVehicleName("First vehicle");
+
+		Vehicle vehicle2 = new Vehicle();
+		vehicle2.setVehicleName("Second vehicle");
+
+		user.getListOfVehicles().add(vehicle);
+		user.getListOfVehicles().add(vehicle2);
+		vehicle.getListOfUsers().add(user);
+		vehicle2.getListOfUsers().add(user);
+
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		// Using persist instead of save to SAVE reference objects in user
+		// objects
+		session.persist(user);
+		session.getTransaction().commit();
+		session.close();
+	}
+
 	private static void testingManyToManyAnnotations() {
 		UserDetails user = new UserDetails();
 		user.setUserName("First user");
@@ -501,6 +533,7 @@ public class HibernateTest {
 		testingOneToOneMapping();
 		testingOneToManyAnnotation();
 		testingManyToManyAnnotations();
+		testingCascadeAndNotFound();
 	}
 
 	/**

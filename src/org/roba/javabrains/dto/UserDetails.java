@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -19,6 +20,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  * Test class to work with hibernate (databases)
@@ -79,7 +83,11 @@ public class UserDetails {
 		this.listOfAddresses = listOfAddresses;
 	}
 
-	@ManyToMany
+	// Using cascade to save user's object with reference values
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	// Using not found annotation to avoid NotFound exception, if table will be
+	// read with null values
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Collection<Vehicle> listOfVehicles = new ArrayList<Vehicle>();
 
 	public Collection<Vehicle> getListOfVehicles() {
