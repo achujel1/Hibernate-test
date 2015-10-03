@@ -1,7 +1,9 @@
 package org.roba.javabrains.hibernate;
 
 import java.util.Date;
+import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -30,6 +32,36 @@ public class HibernateTest {
 		// Space for some code
 	}
 
+	/**
+	 * Tested how hql and the query objects work in hibernate
+	 */
+	private static void hqlAndTheQueryObjects() {
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		for (int i = 0; i < 9; i++) {
+			UserDetails user = new UserDetails();
+			user.setUserName("user name");
+			session.save(user);
+		}
+
+		Query query = session.createQuery("from UserDetails");
+		List users = query.list();
+		session.getTransaction().commit();
+		session.close();
+		System.out.println("Size of list result = " + users.size());
+	}
+
+	/**
+	 * Here I'm craeting an object after session's transaction has begun
+	 * working. I'm closing session, creating a new one and updating the same
+	 * object.
+	 */
 	private static void persistedDetachedObjects() {
 		Configuration config = new Configuration().configure();
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -714,6 +746,7 @@ public class HibernateTest {
 		crudOperations();
 		transientPersistenAndDetachedObjects();
 		persistedDetachedObjects();
+		hqlAndTheQueryObjects();
 	}
 
 	/**
