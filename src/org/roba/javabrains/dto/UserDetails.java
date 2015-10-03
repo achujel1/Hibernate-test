@@ -30,10 +30,12 @@ import org.hibernate.annotations.NotFoundAction;
  * @author roba
  *
  */
+@SuppressWarnings("deprecation")
 // @Entity(name = "USER_DETAILS")
 // You can also use Entity annotation and name your table
 @Entity
 @Table(name = "USER_DETAILS")
+@org.hibernate.annotations.Entity(selectBeforeUpdate = true)
 public class UserDetails {
 
 	@Id

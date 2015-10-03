@@ -27,7 +27,31 @@ public class HibernateTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		// Space for some code
+	}
 
+	private static void persistedDetachedObjects() {
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		UserDetails user = (UserDetails) session.get(UserDetails.class, 1);
+
+		session.getTransaction().commit();
+		session.close();
+
+		user.setUserName("Changed name");
+
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.update(user);
+
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	/**
@@ -689,6 +713,7 @@ public class HibernateTest {
 		implementingInheritanceWithTablePerClassStrategy();
 		crudOperations();
 		transientPersistenAndDetachedObjects();
+		persistedDetachedObjects();
 	}
 
 	/**
