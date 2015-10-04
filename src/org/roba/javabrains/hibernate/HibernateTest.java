@@ -29,11 +29,44 @@ public class HibernateTest {
 	 * 
 	 * @param args
 	 */
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		// Space for some code
+	}
+
+	/**
+	 * Tested how parameter binding and sql injection works. Seems that
+	 * parameter binding is depricated way, so I won't use it.
+	 */
+	private static void parameterBindingAndSqlInjection() {
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		for (int i = 1; i < 10; i++) {
+			UserDetails user = new UserDetails();
+			user.setUserName("userName " + i);
+			session.save(user);
+		}
+
+		String userId = "7";
+		String userName = "userName 7";
+
+		Query query = session
+				.createQuery("from UserDetails where userId = :userId and userName = :userName");
+		query.setInteger("userId", Integer.parseInt(userId));
+		query.setString("userName", userName);
+
+		List<UserDetails> userDetails = (List<UserDetails>) query.list();
+		session.getTransaction().commit();
+		session.close();
+
+		for (UserDetails u : userDetails) {
+			System.out.println(u.getUserId() + ". " + u.getUserName());
+		}
 	}
 
 	/**
@@ -808,6 +841,7 @@ public class HibernateTest {
 		persistedDetachedObjects();
 		hqlAndTheQueryObjects();
 		selectAndPagination();
+		parameterBindingAndSqlInjection();
 	}
 
 	/**
