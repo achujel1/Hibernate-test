@@ -2,6 +2,7 @@ package org.roba.javabrains.hibernate;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -28,8 +29,67 @@ public class HibernateTest {
 	 * 
 	 * @param args
 	 */
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		// Space for some code
+	}
+
+	/**
+	 * Tested how select with different column values values and data types work
+	 */
+	private static void selectAndPagination() {
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		// This is a query to get all of the userName values in userName column
+		// with UserDetails list
+		Query queryUserDetails = session.createQuery("from UserDetails");
+		queryUserDetails.setFirstResult(10);
+		queryUserDetails.setMaxResults(15);
+		List<UserDetails> users = (List<UserDetails>) queryUserDetails.list();
+
+		for (UserDetails u : users) {
+			System.out.println(u.getId() + ". UserDetails: " + u.getUserName());
+		}
+
+		// This is a query to get all of the String values in userName column
+		// with a list of String
+		Query queryStrings = session
+				.createQuery("select userName from UserDetails");
+		queryStrings.setFirstResult(10);
+		queryStrings.setMaxResults(15);
+		List<String> userString = (List<String>) queryStrings.list();
+
+		int i = 1;
+		for (String u : userString) {
+			System.out.println(i + ". String: " + u);
+			i++;
+		}
+
+		// This is a query to get all of the userId and userName values in
+		// columns userId, userName into Map<Integer, String>
+		Query queryMap = session
+				.createQuery("select new map(userId, userName) from UserDetails");
+		queryMap.setFirstResult(10);
+		queryMap.setMaxResults(15);
+		List<Map<Integer, String>> userMap = (List<Map<Integer, String>>) queryMap
+				.list();
+
+		int j = 1;
+		for (Map u : userMap) {
+			System.out.println(j + ". Simply map" + u);
+			j++;
+		}
+
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	/**
@@ -747,6 +807,7 @@ public class HibernateTest {
 		transientPersistenAndDetachedObjects();
 		persistedDetachedObjects();
 		hqlAndTheQueryObjects();
+		selectAndPagination();
 	}
 
 	/**
