@@ -32,6 +32,58 @@ public class HibernateTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		// Space for some code
+	}
+
+	/**
+	 * Testing how Restrictions class works
+	 */
+	private static void understandingRestrictions() {
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		for (int i = 1; i < 10; i++) {
+			UserDetails user = new UserDetails();
+			user.setUserName("userName " + i);
+			session.save(user);
+		}
+
+		Criteria criteria = session.createCriteria(UserDetails.class);
+		Criteria criteriaTwo = session.createCriteria(UserDetails.class);
+		Criteria criteriaThree = session.createCriteria(UserDetails.class);
+		// Using Restrictions class to get the values
+		criteria.add(Restrictions.eq("userName", "userName 6")).add(
+				Restrictions.gt("userId", 5));
+		criteriaTwo.add(Restrictions.like("userName", "%user%")).add(
+				Restrictions.between("userId", 5, 10));
+		criteriaThree.add(Restrictions.or(Restrictions.between("userId", 0, 3),
+				Restrictions.between("userId", 8, 9)));
+
+		List<UserDetails> users = (List<UserDetails>) criteria.list();
+		List<UserDetails> usersTwo = (List<UserDetails>) criteriaTwo.list();
+		List<UserDetails> usersThree = (List<UserDetails>) criteriaThree.list();
+		session.getTransaction().commit();
+		session.close();
+
+		System.out.println("Restriction one");
+		for (UserDetails u : users) {
+			System.out.println(u.getUserId() + ". " + u.getUserName());
+		}
+
+		System.out.println("Restriction two");
+		for (UserDetails u : usersTwo) {
+			System.out.println(u.getUserId() + ". " + u.getUserName());
+		}
+
+		System.out.println("Restriction three");
+		for (UserDetails u : usersThree) {
+			System.out.println(u.getUserId() + ". " + u.getUserName());
+		}
 	}
 
 	/**
@@ -916,6 +968,7 @@ public class HibernateTest {
 		parameterBindingAndSqlInjection();
 		namedQueries();
 		criteriaAppi();
+		understandingRestrictions();
 	}
 
 	/**
