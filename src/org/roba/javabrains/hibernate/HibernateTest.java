@@ -30,7 +30,45 @@ public class HibernateTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// Space for some code
+
+	}
+
+	/**
+	 * Here I'm testing how namedQueries (and annotations) work in hibernate
+	 */
+	private static void namedQueries() {
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		for (int i = 1; i < 10; i++) {
+			UserDetails user = new UserDetails();
+			user.setUserName("userName " + i);
+			session.save(user);
+		}
+
+		// This is where I'm using @NamedQuery annotation in UserDetails class
+		Query query = session.getNamedQuery("UserDetails.byId");
+		query.setInteger(0, 2);
+		Query queryTwo = session.getNamedQuery("UserDetails.byName");
+		queryTwo.setString(0, "userName 2");
+
+		List<UserDetails> userDetails = (List<UserDetails>) query.list();
+		List<UserDetails> userDetailsTwo = (List<UserDetails>) queryTwo.list();
+		session.getTransaction().commit();
+		session.close();
+
+		for (UserDetails u : userDetails) {
+			System.out.println(u.getUserId() + ". " + u.getUserName());
+		}
+
+		for (UserDetails u : userDetailsTwo) {
+			System.out.println(u.getUserId() + ". " + u.getUserName());
+		}
 	}
 
 	/**
@@ -842,6 +880,7 @@ public class HibernateTest {
 		hqlAndTheQueryObjects();
 		selectAndPagination();
 		parameterBindingAndSqlInjection();
+		namedQueries();
 	}
 
 	/**

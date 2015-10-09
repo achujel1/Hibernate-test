@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -34,6 +36,8 @@ import org.hibernate.annotations.NotFoundAction;
 // @Entity(name = "USER_DETAILS")
 // You can also use Entity annotation and name your table
 @Entity
+@NamedQuery(name = "UserDetails.byId", query = "from UserDetails where userId = ?")
+@NamedNativeQuery(name = "UserDetails.byName", query = "select * from User_Details where username = ?", resultClass = UserDetails.class)
 @Table(name = "USER_DETAILS")
 @org.hibernate.annotations.Entity(selectBeforeUpdate = true)
 public class UserDetails {
