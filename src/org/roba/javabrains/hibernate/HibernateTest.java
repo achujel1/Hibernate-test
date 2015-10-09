@@ -4,11 +4,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
 import org.roba.javabrains.dto.Address;
 import org.roba.javabrains.dto.FourWheeler;
@@ -30,7 +32,39 @@ public class HibernateTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+	}
 
+	/**
+	 * Used Criteria API to get the objects I've wanted
+	 */
+	private static void criteriaAppi() {
+		Configuration config = new Configuration().configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config
+				.buildSessionFactory(serviceRegistry);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		for (int i = 1; i < 10; i++) {
+			UserDetails user = new UserDetails();
+			user.setUserName("userName " + i);
+			session.save(user);
+		}
+
+		// This is where I'm using criteria clas to get the UserDetails object
+		Criteria criteria = session.createCriteria(UserDetails.class);
+		// Pay attention to values you give! I almost made a mistake misstyping
+		// one letter (username instead of userName)
+		criteria.add(Restrictions.eq("userName", "userName 1"));
+
+		List<UserDetails> users = (List<UserDetails>) criteria.list();
+		session.getTransaction().commit();
+		session.close();
+
+		for (UserDetails u : users) {
+			System.out.println(u.getUserId() + ". " + u.getUserName());
+		}
 	}
 
 	/**
@@ -881,6 +915,7 @@ public class HibernateTest {
 		selectAndPagination();
 		parameterBindingAndSqlInjection();
 		namedQueries();
+		criteriaAppi();
 	}
 
 	/**
